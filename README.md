@@ -2,62 +2,68 @@ Vamos construir um chatbot com inteligência artificial que roda na nossa máqui
 
 Vamos analisar as tecnologias e ferramentas que iremos utilizar nesse projeto
 
-SDK AI da Vercel
+- [SDK AI da Vercel](https://sdk.vercel.ai/)
+    
+    A Vercel criou um kit de ferramentas poderosas para trabalharmos com inteligência artificial nos nossos projetos.
+    
+- [Ollama](https://ollama.com/)
+    
+    Utilize diversas LLMs localmente como Phi 3 (microsoft), Gemma 2 (Google), Llama 3 (Meta) e outras
+    
+- [SvelteKit](https://kit.svelte.dev/)
+    
+    Framework para desenvolver interfaces e aplicativos web utilizando Svelte. SvelteKit está para o Svelte como o Next está para o React ou o Nuxt está para o Vue.
+    
+- [Tailwind](https://tailwindcss.com)
+    
+    Utilitário CSS para criar interfaces a partir de classes em elementos HTML
+    
+- [V0 da Vercel](https://v0.dev)
+    
+    Criação de interfaces com ajuda da Inteligência artificial, seguindo padrões do [Shadcn/ui](https://ui.shadcn.com/)
+    
 
-A Vercel criou um kit de ferramentas poderosas para trabalharmos com inteligência artificial nos nossos projetos.
+## Passo 01
 
-Ollama
-
-Utilize diversas LLMs localmente como Phi 3 (microsoft), Gemma 2 (Google), Llama 3 (Meta) e outras
-
-SvelteKit
-
-Framework para desenvolver interfaces e aplicativos web utilizando Svelte. SvelteKit está para o Svelte como o Next está para o React ou o Nuxt está para o Vue.
-
-Tailwind
-
-Utilitário CSS para criar interfaces a partir de classes em elementos HTML
-
-V0 da Vercel
-
-Criação de interfaces com ajuda da Inteligência artificial, seguindo padrões do Shadcn/ui
-
-Passo 01
 Instalação de todas as ferramentas necessárias.
 
-Ollama
+### Ollama
+
 Baixe direto do site https://ollama.com/download ou, no MacOS você poderá utilizar o homebrew
 
-brew install ollama
+`brew install ollama`
 
 Utilizaremos a LLM Gemma 2 nessa aula.
 
-ollama pull gemma2
+`ollama pull gemma2` 
 
-SvelteKit
-Vamos iniciar um projeto e dar o nome de sveltekit-chat-ollama.
+### SvelteKit
 
-Utilizaremos o gerenciador de pacotes pnpm nessa aula
+Vamos iniciar um projeto e dar o nome de sveltekit-chat-ollama. 
 
-pnpm create svelte@latest sveltekit-chat-ollama
+Utilizaremos o gerenciador de pacotes `pnpm` nessa aula
+
+`pnpm create svelte@latest sveltekit-chat-ollama` 
 
 Seguiremos a configuração conforme o gosto (prettier e eslint são coisas que eu gosto)
 
-cd sveltekit-chat-ollama - navegar até o diretório do projeto
+`cd sveltekit-chat-ollama` - navegar até o diretório do projeto
 
-pnpm install - instalar as dependências
+`pnpm install` - instalar as dependências
 
-git init && git add -A && git commit -m "Initial commit" - iniciar o git e dar o primeiro commit
+`git init && git add -A && git commit -m "Initial commit"` - iniciar o git e dar o primeiro commit
 
-pnpm run dev -- --open - rodar o projeto
+`pnpm run dev -- --open` - rodar o projeto
 
-Tailwind
-pnpm add -D tailwindcss postcss autoprefixer - adicionar o tailwind no projeto
+### Tailwind
 
-npx tailwindcss init -p- iniciar as configurações do tailwind
+`pnpm add -D tailwindcss postcss autoprefixer` - adicionar o tailwind no projeto
+
+`npx tailwindcss init -p`- iniciar as configurações do tailwind
 
 Confira se os arquivos abaixo estão com essas configurações
 
+```jsx
 // tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -87,32 +93,43 @@ const config = {
 };
 
 export default config;
-touch src/app.css - adicionar o CSS base
+```
 
+`touch src/app.css` - adicionar o CSS base
+
+```css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-touch src/routes/+layout.svelte - criar o layout base
+```
 
+`touch src/routes/+layout.svelte` - criar o layout base
+
+```html
 <script>
   import "../app.css";
 </script>
 
 <slot />
-Neste ponto, podemos fazer um git add . && git commit -m "add tailwind"
+```
 
-Chat da v0.dev
-Fiz uma pesquisa na v0.dev e encontrei esse chat
+Neste ponto, podemos fazer um `git add . && git commit -m "add tailwind"`
 
-A dope chat application that looks like WhatsApp. It has a sidebar of history messages/contacts. A emoji picker button should be next to the input. | A shadcn/ui and v0 generation
+## Chat da v0.dev
 
-Copiei o código e coloquei no src/routes/+page.svelte
+Fiz uma pesquisa na [v0.dev](http://v0.dev) e encontrei esse chat
 
-Dependências da Vercel e Ollama
-pnpm add ai @ai-sdk/svelte ollama-ai-provider
+[A dope chat application that looks like WhatsApp. It has a sidebar of history messages/contacts. A emoji picker button should be next to the input. | A shadcn/ui and v0 generation](https://v0.dev/t/LOyl5Wee15h)
 
-touch src/routes/api/chat/+server.js - cria a rota /api/chat
+Copiei o código e coloquei no `src/routes/+page.svelte`
 
+## Dependências da Vercel e Ollama
+
+`pnpm add ai @ai-sdk/svelte ollama-ai-provider`
+
+`touch src/routes/api/chat/+server.js` - cria a rota `/api/chat` 
+
+```jsx
 import { createOllama } from "ollama-ai-provider";
 import { streamText } from "ai";
 
@@ -128,8 +145,11 @@ export async function POST({ request }) {
 
   return result.toAIStreamResponse();
 }
-Vamos utilizar SDK da Vercel no nosso chat src/routes/+page.svelte e trabalhar com as mensagens
+```
 
+Vamos utilizar SDK da Vercel no nosso chat `src/routes/+page.svelte` e trabalhar com as mensagens
+
+```html
 <script>
   import { useChat } from '@ai-sdk/svelte';
 
@@ -161,16 +181,22 @@ Vamos utilizar SDK da Vercel no nosso chat src/routes/+page.svelte e trabalhar c
   </div>
 </main>
 ...
-Vamos precisar utilizar o handleSubmitno formulário, o input no campo de escrever mensagem para a IA e configurar o botão de submit
+```
 
+Vamos precisar utilizar o `handleSubmit`no formulário, o `input` no campo de escrever mensagem para a IA e configurar o botão de submit
+
+```html
 <form on:submit={handleSubmit}> 
 ... 
 <input bind:value={$input} />
 ...
 <button type="submit"> ...
-Próximos passos
+```
+
+## Próximos passos
+
 Instalar algumas perfumarias para o chat ficar mais interessante na questão da formatação e código.
 
-npm: svelte-markdown
+[npm: svelte-markdown](https://www.npmjs.com/package/svelte-markdown)
 
-Tailwind CSS Typography
+[Tailwind CSS Typography](https://tailwindcss-typography.vercel.app/)
