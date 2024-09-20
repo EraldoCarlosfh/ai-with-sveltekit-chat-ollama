@@ -11,5 +11,5 @@ export async function POST({ request }) {
     messages,
   });
 
-  return result.toTextStreamResponse();
+  return result.toAIStreamResponse();
 }
